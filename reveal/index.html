@@ -130,6 +130,7 @@
                     <section data-background="#ffd7c8">
                         <p><small>Problem 2:</small></p>
                         <h2>Writing Native Client apps is hard</h2>
+                        <p>because we need to talk to the browser</p>
                     </section>
                     <section>
                         <p>TODO Example, postMessage</p>
@@ -152,6 +153,15 @@
                     </section>
                 </section>
                 <section>
+                    <h2>Features</h2>
+                    <ul>
+                        <li><code>pprpcgen</code>: generate C++ and JS stubs</li>
+                        <li>Type checking in both JS and C++</li>
+                        <li>Results sent in callbacks</li>
+                        <li>Modules with many interfaces supported</li>
+                    </ul>
+                </section>
+                <section>
                     <h2>Usage</h2>
                     <ol>
                         <li>Write interface in WebIDL</li>
@@ -172,12 +182,95 @@
                     </ul>
                 </section>
                 <section>
-                    <h2>RPC Framework</h2>
-                    <p>Todo</p>
+                    <section>
+                        <h2>RPC Framework</h2>
+                    </section>
+                    <section>
+                        <h3>A layered approach to RPC</h3>
+                        <ul>
+                            <li>Stub layer</li>
+                            <li>Runtime layer</li>
+                            <li>RPC layer</li>
+                            <li>Transport layer</li>
+                        </ul>
+                    </section>
+                    <section>
+                        <img src="img/caller-layers.png" alt="Caller layer structure"/>
+                    </section>
+                    <section>
+                        <img src="img/callee-layers.png" alt="Callee layer structure"/>
+                    </section>
                 </section>
                 <section>
-                    <h2>WebIDL Bindings</h2>
-                    <p>Todo</p>
+                    <section>
+                        <h2>WebIDL Bindings</h2>
+                        <img src="img/js-webidl.png" alt="JavaScript - WebIDL - Languages Diagram"/>
+                    </section>
+                    <section>
+                        <h3>JavaScript bindings are easy</h3>
+                        <p>Just follow the spec</p>
+                    </section>
+                    <section>
+                        <h3>W3C WebIDL Specification</h3>
+                        <iframe src="http://www.w3.org/TR/WebIDL/" frameborder="0" style="width:100%; height:400px;"></iframe>
+                    </section>
+                    <section>
+                        <h3>C++ Bindings require more thought</h3>
+                        <ul>
+                            <li>Numbers and unsigned numbers</li>
+                            <li>Strings</li>
+                            <li>Dictionaries</li>
+                            <li>Interfaces</li>
+                        </ul>
+                    </section>
+                    <section>
+                        <h3>Number types</h3>
+                        <img src="img/webidl_numbers.png" alt="WebIDL C++ Number Bindings"/>
+                    </section>
+                    <section>
+                        <h3>DOMStrings and sequences</h3>
+                        <p><code class="fragment highlight-blue">std::string</code> &nbsp; &nbsp; vs &nbsp; &nbsp; <code>char[]</code></p>
+                        <p><code class="fragment highlight-blue">std::vector&lt;T&gt;</code> &nbsp; &nbsp; vs &nbsp; &nbsp; <code>T[]</code></p>
+                    </section>
+                    <section>
+                        <h3>Dictionaries...</h3>
+                        <p>In WebIDL</p>
+                        <pre><code>dictionary MyDictionary { DOMString id; double value; }</code></pre>
+                        <p>In JavaScript</p>
+                        <pre><code>{id: "myId", value: 123.456}</code></pre>
+                        <p>In C++</p>
+                        <pre><code>typedef struct { std::string id; double value } MyDictionary;</code></pre>
+                    </section>
+                    <section>
+                        <h3>Interfaces in JavaScript</h3>
+                        <p>Each interface name points to a map of functions</p>
+                        <pre><code>{
+  "MyInterface": {
+    "foo": function(){...},
+    "bar": function(){...}
+  },
+  "SecondInterface": {
+    "fun": function(){...}
+  }
+}</code></pre>
+                    </section>
+                    <section>
+                        <h3>Interfaces in C++</h3>
+                        <p>Each function is a class that implements <code>call</code></p>
+                        <pre><code>class ServerStub_StepScene : public RPCServerStub{
+public:
+  virtual pp::Var call(const pp::VarArray* params, RPCError& error){
+    // unpack params
+    // call concrete function
+    // pack result
+  }
+};</code></pre>
+                    </section>
+                    <section>
+                        <h3>Paramater Marshalling in C++</h3>
+                        <p>Using WebIDL, we know what paramaters the user expects</p>
+                    </section>
+
                 </section>
                 <section>
                     <h2>Code Generator</h2>
