@@ -113,7 +113,7 @@
                     <p>Run native code in a sandboxed environment</p>
                 </section>
                 <section>
-                    <section>
+                    <section data-state="no-demo">
                         <h2>The performance difference</h2>
                         <p>It's a close one, but Native Client wins when we add threads</p>
                     </section>
@@ -138,9 +138,30 @@
                         <p>because we need to talk to the browser</p>
                     </section>
                     <section>
-                        <p>TODO Example, postMessage</p>
-                        <pre><code data-trim contenteditable>
-// some code will be here soon :D
+                        <h3>PostMessage and HandleMessage</h3>
+                        <pre><code class="js" data-trim contenteditable>
+embed.postMessage({
+  command: 'sum',
+  x: 1,
+  y: 2
+});
+
+embed.addEventListener('message', function(message){
+  console.log(message);
+});
+                        </code></pre>
+                        <pre><code class="cpp" data-trim contenteditable>
+int sum(int x, int y){
+  return x + y;
+}
+
+void HandleMessage(pp::Var message){
+  // check which function is being called
+  // get x and y from message
+  int result = sum(x, y);
+  pp::Var resultMessage(result);
+  PostMessage(resultMessage);
+}
                         </code></pre>
                     </section>
                 </section>
@@ -151,10 +172,18 @@
                         <h2>Native Calls</h2>
                     </section>
                     <section>
-                        <p>TODO interactive example</p>
-                    </section>
-                    <section>
-                        <p>TODO bullet demo</p>
+                        <h2>Native Calls</h2>
+                        <pre><code class="js" data-trim contenteditable>
+Module.sum(1, 2, function(result){
+  console.log(result);
+});
+
+                        </code></pre>
+                        <pre><code class="cpp" data-trim contenteditable>
+int sum(int x, int y){
+  return x + y;
+}
+                        </code></pre>
                     </section>
                 </section>
                 <section>
@@ -240,11 +269,11 @@
                     <section>
                         <h3>Dictionaries...</h3>
                         <p>In WebIDL</p>
-                        <pre><code>dictionary MyDictionary { DOMString id; double value; }</code></pre>
+                        <pre><code class="idl">dictionary MyDictionary { DOMString id; double value; }</code></pre>
                         <p>In JavaScript</p>
-                        <pre><code>{id: "myId", value: 123.456}</code></pre>
+                        <pre><code class="json">{"id": "myId", "value": 123.456}</code></pre>
                         <p>In C++</p>
-                        <pre><code>typedef struct { std::string id; double value } MyDictionary;</code></pre>
+                        <pre><code class="cpp">typedef struct { std::string id; double value } MyDictionary;</code></pre>
                     </section>
                     <section>
                         <h3>Interfaces in JavaScript</h3>
@@ -262,7 +291,7 @@
                     <section>
                         <h3>Interfaces in C++</h3>
                         <p>Each function is a class that implements <code>call</code></p>
-                        <pre><code>class ServerStub_StepScene : public RPCServerStub{
+                        <pre><code class="cpp">class ServerStub_StepScene : public RPCServerStub{
 public:
   virtual pp::Var call(const pp::VarArray* params, RPCError& error){
     // unpack params
@@ -274,6 +303,18 @@ public:
                     <section>
                         <h3>Paramater Marshalling in C++</h3>
                         <p>Using WebIDL, we know what paramaters the user expects</p>
+                        <p>Extract parameters recursively using wrapper classes</p>
+                        <pre><code class="cpp">pp::Var LongType::AsVar(const ValidType&lt;int32_t&gt;& v){
+  return pp::Var((int) v.getValue());
+}
+
+ValidType&lt;int32_t&gt; LongType::Extract(const pp::Var& v){
+  if(v.is_int()){ // valid
+    return ValidType&lt;int32_t&gt;((int32_t)v.AsInt());
+  } else {
+    return ValidType&lt;int32_t&gt;(); // invalid
+  }
+}</code></pre>
                     </section>
 
                 </section>
@@ -323,7 +364,7 @@ public:
 
             Reveal.addEventListener('emscripten-embed', function(){
                 $('.demo-div').children().remove();
-                $('.demo-div').html('<div style="width:480px; height:480px;"></div>');
+                $('.demo-div').html('<div style="width:512px; height:512px;"></div>');
                 setTimeout(function(){
                     $('#emscripten-iframe').html('<iframe src="demo_voronoi/demo.html?tc=emscripten&config=Release" scrolling="no" style="width:480px; height:480px; overflow-y: hidden;"></iframe>');
                 }, 500);
@@ -331,13 +372,15 @@ public:
             }, false);
             Reveal.addEventListener('nacl-embed', function(){
                 $('.demo-div').children().remove();
-                $('.demo-div').html('<div style="width:480px; height:480px;"></div>');
+                $('.demo-div').html('<div style="width:512px; height:512px;"></div>');
                 setTimeout(function(){
                     $('#pnacl-iframe').html('<iframe src="demo_voronoi/demo.html?tc=pnacl&config=Release" scrolling="no" style="width:480px; height:480px; overflow-y: hidden;"></iframe>');
                 }, 500);
             }, false);
             Reveal.addEventListener('no-demo', function(){
                 $('.demo-div').children().remove();
+                $('.demo-div').html('<div style="width:512px; height:512px;"></div>');
+
             }, false);
 
 		</script>
