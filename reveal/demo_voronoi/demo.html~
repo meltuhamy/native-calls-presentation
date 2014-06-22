@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<!-- saved from url=(0102)http://gonacl.commondatastorage.googleapis.com/pepper.js/earth/data/earth.html?tc=pnacl&config=Release -->
+<html><!--
+Copyright (c) 2013 The Chromium Authors. All rights reserved.
+Use of this source code is governed by a BSD-style license that can be
+found in the LICENSE file.
+--><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta http-equiv="x-ua-compatible" content="IE=edge">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="-1">
+  <meta charset="UTF-8">
+  <title>Voronoi Demo</title>
+  <!--<link rel="stylesheet" type="text/css" href="./examples.css">-->
+  <script type="text/javascript" src="loadnacl.js"></script>
+  <script type="text/javascript" src="common.js"></script>
+  <script type="text/javascript" src="example.js"></script>
+  <style>
+    body { margin: 0; }
+  </style>
+</head>
+<body data-name="earth" data-width="512" data-height="512" data-tools="emscripten newlib pnacl" data-configs="Debug Release" data-path="./{tc}/{config}">
+  <div id="listener"><embed src="./pnacl/Release/earth.nmf" type="application/x-pnacl" width="512" height="512" name="nacl_module" id="nacl_module" path="./pnacl/Release"></div>
+</body>
+</html>

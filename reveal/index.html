@@ -31,6 +31,11 @@
 			}
 		</script>
 
+        <script src="lib/js/head.min.js"></script>
+        <script src="js/reveal.min.js"></script>
+        <script src="lib/js/jquery-2.1.1.min.js"></script>
+
+
 		<!--[if lt IE 9]>
 		<script src="lib/js/html5shiv.js"></script>
 		<![endif]-->
@@ -112,16 +117,16 @@
                         <h2>The performance difference</h2>
                         <p>It's a close one, but Native Client wins when we add threads</p>
                     </section>
-                    <section>
+                    <section data-state="emscripten-embed">
                         <h3>Emscripten</h3>
-                        <p>TODO: Embed</p>
+                        <div id="emscripten-iframe" class="demo-div" > <div style="width:480px; height:480px;"></div></div>
                     </section>
-                    <section>
+                    <section data-state="nacl-embed">
                         <h3>Native Client</h3>
-                        <p>TODO: Embed</p>
+                        <div id="pnacl-iframe" class="demo-div"> <div style="width:480px; height:480px;"></div></div>
                     </section>
                 </section>
-                <section data-background="#c7ffd1">
+                <section data-background="#c7ffd1" data-state="no-demo">
                     <p><small>Problem 1 solved:</small></p>
                     <h2>Use Native Client when it's available</h2>
                     <h2>Use Emscripten when it's not</h2>
@@ -286,8 +291,6 @@ public:
 
 		</div>
 
-		<script src="lib/js/head.min.js"></script>
-		<script src="js/reveal.min.js"></script>
 
 		<script>
 
@@ -301,6 +304,7 @@ public:
 
 				theme: Reveal.getQueryHash().theme || 'beige', // available themes are in /css/theme
 				transition: Reveal.getQueryHash().transition || 'default', // default/cube/page/concave/zoom/linear/fade/none
+
 
 				// Parallax scrolling
 //				parallaxBackgroundImage: 'https://s3.amazonaws.com/hakim-static/reveal-js/reveal-parallax-1.jpg',
@@ -316,6 +320,25 @@ public:
 					{ src: 'plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
 				]
 			});
+
+            Reveal.addEventListener('emscripten-embed', function(){
+                $('.demo-div').children().remove();
+                $('.demo-div').html('<div style="width:480px; height:480px;"></div>');
+                setTimeout(function(){
+                    $('#emscripten-iframe').html('<iframe src="demo_voronoi/demo.html?tc=emscripten&config=Release" scrolling="no" style="width:480px; height:480px; overflow-y: hidden;"></iframe>');
+                }, 500);
+                
+            }, false);
+            Reveal.addEventListener('nacl-embed', function(){
+                $('.demo-div').children().remove();
+                $('.demo-div').html('<div style="width:480px; height:480px;"></div>');
+                setTimeout(function(){
+                    $('#pnacl-iframe').html('<iframe src="demo_voronoi/demo.html?tc=pnacl&config=Release" scrolling="no" style="width:480px; height:480px; overflow-y: hidden;"></iframe>');
+                }, 500);
+            }, false);
+            Reveal.addEventListener('no-demo', function(){
+                $('.demo-div').children().remove();
+            }, false);
 
 		</script>
 
