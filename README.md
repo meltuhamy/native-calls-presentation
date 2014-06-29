@@ -1,4 +1,4 @@
 # Native Calls Presentation
 
-* [https://github.com/meltuhamy/native-calls](Native Calls)
-* [https://github.com/meltuhamy/native-calls-report](Native Calls Report)
+* [Native Calls](https://github.com/meltuhamy/native-calls)
+* [Native Calls Report](https://github.com/meltuhamy/native-calls-report)
